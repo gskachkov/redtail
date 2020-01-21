@@ -16,6 +16,7 @@ def state_cb(state):
     global current_state
     current_state = state
 
+mavros.set_namespace('/mavros')
 local_pos_pub = rospy.Publisher(mavros.get_topic('setpoint_position', 'local'), PoseStamped, queue_size=10)
 state_sub = rospy.Subscriber(mavros.get_topic('state'), State, state_cb)
 arming_client = rospy.ServiceProxy(mavros.get_topic('cmd', 'arming'), CommandBool)
