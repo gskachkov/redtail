@@ -22,7 +22,7 @@ def gps_pos_cb(nav):
     current_gps = nav
     
 rospy.loginfo("Step #1");
-mavros.set_namespace('/mavros')
+mavros.set_namespace('mavros')
 local_pos_pub = rospy.Publisher(mavros.get_topic('setpoint_position', 'local'), PoseStamped, queue_size=10)
 #gps_pos_pub = rospy.Subscriber(mavros.get_topic('global_position','global'), NatSatFix, queue_size=10)
 state_sub = rospy.Subscriber(mavros.get_topic('state'), State, state_cb)
