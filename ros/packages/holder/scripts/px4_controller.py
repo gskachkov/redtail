@@ -7,6 +7,7 @@ from mavros_msgs.msg import State
 from mavros_msgs.srv import CommandBool, SetMode
 from sensor_msgs.msg import NavSatFix
 
+rospy.loginfo("Start");
 # callback method for state sub
 current_state = State() 
 offb_set_mode = SetMode
@@ -20,7 +21,7 @@ def gps_pos_cb(nav):
     global current_gps
     current_gps = nav
     
-    
+rospy.loginfo("Step #1");
 mavros.set_namespace('/mavros')
 local_pos_pub = rospy.Publisher(mavros.get_topic('setpoint_position', 'local'), PoseStamped, queue_size=10)
 #gps_pos_pub = rospy.Subscriber(mavros.get_topic('global_position','global'), NatSatFix, queue_size=10)
@@ -33,31 +34,37 @@ pose = PoseStamped()
 pose.pose.position.x = 0
 pose.pose.position.y = 0
 pose.pose.position.z = 2
-
+rospy.loginfo("Step #2");
 #gps_pose = NavSatFix()
 #gps_pose.altitude = 10
 #gps_pose.latitude = current_gps.latitude
 #gps_pose.longitude = current_gps.longitude
 
-
+rospy.loginfo("Step #3");
 def position_control():
+    rospy.loginfo("Step #4");
     rospy.init_node('offb_node', anonymous=True)
     prev_state = current_state
     rate = rospy.Rate(20.0) # MUST be more then 2Hz
 
+    rospy.loginfo("Step #5");
     # send a few setpoints before starting
     for i in range(100):
         local_pos_pub.publish(pose)
         rate.sleep()
     
+    rospy.loginfo("Step #6");
     # wait for FCU connection
     while not current_state.connected:
         rate.sleep()
+
+    rospy.loginfo("Wait #7");
 
     print (current_gps)
     last_request = rospy.get_rostime()
     count = 0
     while not rospy.is_shutdown():
+	rospy.loginfo("Try #8");
         now = rospy.get_rostime()
         if current_state.mode != "OFFBOARD" and (now - last_request > rospy.Duration(5.)):
             set_mode_client(base_mode=0, custom_mode="OFFBOARD")
