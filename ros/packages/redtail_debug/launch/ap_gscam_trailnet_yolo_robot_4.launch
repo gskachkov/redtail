@@ -1,8 +1,17 @@
 <?xml version="1.0" ?>
 <launch>
     <!-- 
-    redtail debug .launch file for ZED camera which uses gscam node (in case ZED ROS node is not available).
+    redtail debug .launch file for a webcam which uses gscam node. Please adjust image with and height parameters to your camera model.
     Note that gscam will not perform image undistortion despite taking calibration YAML file as an argument.
+
+ export GSCAM_CONFIG=" multifilesrc location=/home/alex/fly/video_8.avi loop=true ! decodebin ! videoscale method=0 add-borders=false ! video/x-raw, width=640, height=320 ! videoconvert"
+rosrun gscam gscam _frame_id:=/camera_link frame_id:=/camera_link
+rostopic echo /object_dnn/network/output
+
+[0, 0, 96, 65, 224, 102, 174, 62, 
+ 0, 0, 33, 67, 0,   0,   224, 66, 
+ 0, 0, 20, 66, 0,   0,   168, 66]
+
     -->
     <arg name="prototxt_path" default="/home/alex/redtail/models/pretrained/TrailNet_SResNet-18.prototxt"/>
     <arg name="model_path"    default="/home/alex/redtail/models/pretrained/TrailNet_SResNet-18.caffemodel" />
@@ -13,10 +22,11 @@
     <arg name="frame_id"   default="/camera_link" />
 
     <arg name="device"     default="/dev/video0" />
-    <arg name="img_width"  default="3840" />
+    <arg name="img_source_width"  default="1280" />
+    <arg name="img_source_height" default="720" />
+    <arg name="img_width"  default="1920" />
     <arg name="img_height" default="1080" />
     <arg name="host_ip"    default="10.0.1.111" />
-    <arg name="right_crop" default="$(eval int(0.5 * arg('img_width')))" />
 
     <arg name="object_prototxt_path" default="/home/alex/redtail/models/pretrained/yolo-relu.prototxt" />
     <arg name="object_model_path"    default="/home/alex/redtail/models/pretrained/yolo-relu.caffemodel" />
@@ -25,15 +35,6 @@
     <arg name="object_rate_hz"       default="1" />
     <arg name="obj_det_threshold"    default="0.2" />
 
-
-    <!-- Start the GSCAM node -->
-    <node pkg="gscam" type="gscam" name="gscam" output="screen">
-        <!-- Use 1 sink (ROS topic) -->
-        <param name="gscam_config"    value="v4l2src device=$(arg device) ! video/x-raw, width=$(arg img_width), height=$(arg img_height) ! videocrop top=0 left=0 right=$(arg right_crop) bottom=0 ! videoconvert" />
-        <param name="frame_id"        value="$(arg frame_id)" />
-    </node>
-
-    <!-- Start the caffe_ros node -->
     <node pkg="caffe_ros" type="caffe_ros_node" name="trails_dnn" output="screen" >
         <param name="prototxt_path" value="$(arg prototxt_path)" />
         <param name="model_path"    value="$(arg model_path)" />
@@ -42,7 +43,6 @@
         <param name="data_type"     value="$(arg data_type)" />
     </node>
 
-    <!-- Start the YOLO caffe_ros node -->
     <node pkg="caffe_ros" type="caffe_ros_node" name="object_dnn" output="screen" >
         <param name="prototxt_path" value="$(arg object_prototxt_path)" />
         <param name="model_path"    value="$(arg object_model_path)" />
@@ -58,6 +58,13 @@
 
     <node pkg="redtail_debug" type="redtail_debug_node" name="redtail_debug" output="screen">
     </node>
+
+    <!--
+    <node pkg="gscam" type="gscam" name="gscam" output="screen">
+        <param name="gscam_config"    value=" multifilesrc location=/home/alex/fly/video_5.avi loop=true ! decodebin ! videoscale method=0 add-borders=false ! video/x-raw, width=$(arg img_width), height=$(arg img_height) ! videoconvert" />
+        <param name="frame_id"        value="$(arg frame_id)" />
+    </node>
+-->
 
     <node pkg="tf" type="static_transform_publisher" name="tf_publisher" args="0 0 0 3.14 0 0 /map $(arg frame_id) 100"/>
 </launch>

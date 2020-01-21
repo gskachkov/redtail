@@ -4,8 +4,8 @@
     redtail debug .launch file for a webcam which uses gscam node. Please adjust image with and height parameters to your camera model.
     Note that gscam will not perform image undistortion despite taking calibration YAML file as an argument.
     -->
-    <arg name="prototxt_path" default="/home/apsync/redtail/models/pretrained/TrailNet_SResNet-18.prototxt"/>
-    <arg name="model_path"    default="/home/apsync/redtail/models/pretrained/TrailNet_SResNet-18.caffemodel" />
+    <arg name="prototxt_path" default="/home/alex/redtail/models/pretrained/TrailNet_SResNet-18.prototxt"/>
+    <arg name="model_path"    default="/home/alex/redtail/models/pretrained/TrailNet_SResNet-18.caffemodel" />
     <arg name="input_layer"  default="data" />
     <arg name="output_layer" default="out" />
     <arg name="data_type"    default="fp16" />
@@ -13,12 +13,14 @@
     <arg name="frame_id"   default="/camera_link" />
 
     <arg name="device"     default="/dev/video0" />
-    <arg name="img_width"  default="3840" />
+    <arg name="img_source_width"  default="1280" />
+    <arg name="img_source_height" default="720" />
+    <arg name="img_width"  default="1920" />
     <arg name="img_height" default="1080" />
     <arg name="host_ip"    default="10.0.1.111" />
 
-    <arg name="object_prototxt_path" default="/home/apsync/redtail/models/pretrained/yolo-relu.prototxt" />
-    <arg name="object_model_path"    default="/home/apsync/redtail/models/pretrained/yolo-relu.caffemodel" />
+    <arg name="object_prototxt_path" default="/home/alex/redtail/models/pretrained/yolo-relu.prototxt" />
+    <arg name="object_model_path"    default="/home/alex/redtail/models/pretrained/yolo-relu.caffemodel" />
     <arg name="object_output_layer"  default="fc25" />
     <arg name="object_data_type"     default="fp16" />
     <arg name="object_rate_hz"       default="1" />
@@ -28,7 +30,7 @@
     <!-- Start the GSCAM node -->
     <node pkg="gscam" type="gscam" name="gscam" output="screen">
         <!-- Use 1 sink (ROS topic) -->
-        <param name="gscam_config"    value="v4l2src device=$(arg device) ! video/x-raw, width=$(arg img_width), height=$(arg img_height) ! videoconvert" />
+        <param name="gscam_config"    value="v4l2src device=$(arg device) ! video/x-raw, width=$(arg img_source_width), height=$(arg img_source_height) ! videoscale method=0 add-borders=false ! video/x-raw, width=$(arg img_width), height=$(arg img_height) ! videoconvert" />
         <param name="frame_id"        value="$(arg frame_id)" />
     </node>
 

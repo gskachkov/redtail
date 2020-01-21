@@ -15,7 +15,7 @@ fi
 
 echo "${green}This script will install several components."
 echo "Please read license agreement for each component and continue only if you accept the license terms."
-echo "ROS Kinetic : http://www.ros.org/"
+echo "ROS melodic : http://www.ros.org/"
 echo "MAVROS      : http://github.com/mavlink/mavros"
 echo "${red}MAVROS note${green} : NVIDIA's use of the MAVROS project is solely under the terms of the BSD license."
 echo "gscam       : http://github.com/ros-drivers/gscam"
@@ -32,9 +32,9 @@ while true; do
     esac
 done
 
-# ROS Kinetic install. Taken from http://wiki.ros.org/kinetic/Installation/Ubuntu with minor modifications.
+# ROS melodic install. Taken from http://wiki.ros.org/melodic/Installation/Ubuntu with minor modifications.
 
-echo "${green}Installing ROS Kinetic...${reset}"
+echo "${green}Installing ROS melodic...${reset}"
 
 # Setup your sources.list
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
@@ -46,7 +46,7 @@ sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 0xB0
 sudo apt-get update
 
 # Install ROS base and MAVROS packages
-sudo apt-get install -y ros-kinetic-ros-base ros-kinetic-mavros ros-kinetic-mavros-extras
+sudo apt-get install -y ros-melodic-ros-base ros-melodic-mavros ros-melodic-mavros-extras
 
 # For some reason, SSL certificates get messed up on TX1 so Python scripts like rosdep will fail. Rehash the certs.
 sudo c_rehash /etc/ssl/certs
@@ -59,8 +59,8 @@ sudo rosdep init
 rosdep update
 
 # Environment setup - optional. Do not run if multiple versions of ROS are present.
-echo "source /opt/ros/kinetic/setup.bash" >> $HOME/.bashrc
-source /opt/ros/kinetic/setup.bash
+echo "source /opt/ros/melodic/setup.bash" >> $HOME/.bashrc
+source /opt/ros/melodic/setup.bash
 
 # Install GStreamer plugins (needed for H.264 encoding etc).
 echo "${green}Installing GStreamer plugins...${reset}"
@@ -91,7 +91,7 @@ sudo apt-get install -y libgstreamer1.0-dev gstreamer1.0-tools libgstreamer-plug
 
 cd $HOME
 # Install gscam dependencies.
-sudo apt-get install -y ros-kinetic-camera-info-manager ros-kinetic-camera-calibration-parsers ros-kinetic-image-transport
+sudo apt-get install -y ros-melodic-camera-info-manager ros-melodic-camera-calibration-parsers ros-melodic-image-transport
 
 # Install gscam from sources rather than apt-get install as the latter installs a lot of redundant stuff.
 cd $HOME
@@ -132,7 +132,7 @@ fi
 
 echo "Installing dependencies..."
 cd $HOME
-sudo apt-get install -y ros-kinetic-angles
+sudo apt-get install -y ros-melodic-angles
 
 cd $CATKIN_WS
 echo "Building caffe_ros package..."
