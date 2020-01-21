@@ -5,8 +5,9 @@
 import rospy
 import mavros
 from geometry_msgs.msg import PoseStamped
-from mavros.msg import State 
-from mavros.srv import CommandBool, SetMode
+from mavros_msgs.msg import State 
+from mavros_msgs.srv import CommandBool, SetMode
+from sensor_msgs.msg import NavSatFix
 
 # callback method for state sub
 current_state = State() 
