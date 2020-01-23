@@ -28,16 +28,9 @@ def callbackRCIn(data):
     rospy.loginfo(rospy.get_caller_id() + 'I header 4 %s', data.channels[4]);
 
 def listener():
-
-    # In ROS, nodes are uniquely named. If two nodes with the same
-    # name are launched, the previous one is kicked off. The
-    # anonymous=True flag means that rospy will choose a unique
-    # name for our 'listener' node so that multiple listeners can
-    # run simultaneously.
-    rospy.init_node('/mavros', anonymous=True)
-
+    mavros.set_namespace('mavros')
     #rospy.Subscriber('/joy', Joy, callback)
-    rospy.Subscriber('/mavros/rc/in', RCIn, callbackRCIn)
+    rospy.Subscriber(mavros.get_topic('rc/in'), RCIn, callbackRCIn)
 
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
