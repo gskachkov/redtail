@@ -21,6 +21,38 @@ joyPub = True
 #        Popen(["python3", "/home/alex/holder/ServoKit/open_holder.py"], close_fds=True)
 #        rospy.loginfo(rospy.get_caller_id() + 'I am droping package')
 
+def getJoyMessage():
+    msg = Joy()
+    msg.axes = [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+        ]
+        msg.buttons = [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+        ]
+     return msg
+
 def callbackRCIn(data):
     global joyPub
     rospy.loginfo(rospy.get_caller_id() + 'I header all %s', data.channels);
@@ -29,6 +61,7 @@ def callbackRCIn(data):
     #rospy.loginfo(rospy.get_caller_id() + 'I header 4 %s', data.channels[4]);
     if data.channels[6] = 1514 :
         joyMsg = Joy()
+                
         joyMsg.buttons = [ 0, 1]
         joyPub.publish(joyMsg)
 
