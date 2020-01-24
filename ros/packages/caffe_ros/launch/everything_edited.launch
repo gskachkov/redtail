@@ -15,10 +15,10 @@
     <!-- 
     Check wifi settings (ifconfig) to get proper IP address for the adapter that is used to connect to TX-2.
     -->
-    <arg name="host_ip" default="127.0.0.1" />
+    <arg name="host_ip" default="192.169.1.1" />
 
 	<!-- MAVROS settings -->
-    <arg name="fcu_url"       default="/dev/ttyTHS1:115200" />
+    <arg name="fcu_url"       default="/dev/ttyACM0:115200" />
 	<arg name="gcs_url"       default="udp://@$(arg host_ip)" />
 	<arg name="tgt_system"    default="1" />
 	<arg name="tgt_component" default="1" />
