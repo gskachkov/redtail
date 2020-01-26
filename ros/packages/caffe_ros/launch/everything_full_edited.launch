@@ -70,5 +70,5 @@
         <!--<arg name="log_output" value="$(arg log_output)" />-->
     </include>
     
-    <node pkg="holder" type="px4_controller.py" name="px4_controller.py"></node>
+    <node pkg="holder" type="holder_controller.py" name="holder_controller.py"></node>
 </launch>
