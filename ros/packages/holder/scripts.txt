@@ -28,4 +28,4 @@ rosrun px4_controller px4_controller_node _altitude_gain:=2
 
 gst-launch-1.0 multifilesrc location=/home/alex/fly/test_2020_8.avi ! decodebin !
 
-
+export GSCAM_CONFIG=" filesrc location=/home/alex/fly/test_2020_8.avi ! decodebin  ! tee name=t ! queue ! videoconvert ! xvimagesink t. ! queue ! videoconvert"

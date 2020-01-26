@@ -18,7 +18,7 @@
     <arg name="host_ip" default="192.169.1.1" />
 
 	<!-- MAVROS settings -->
-    <arg name="fcu_url"       default="/dev/ttyACM0:115200" />
+    <arg name="fcu_url"       default="/dev/ttyACM0:921600" />
 	<arg name="gcs_url"       default="udp://@$(arg host_ip)" />
 	<arg name="tgt_system"    default="1" />
 	<arg name="tgt_component" default="1" />
@@ -37,6 +37,7 @@
     </node>
    -->
     <!-- Start the Trails caffe_ros node -->
+    <!--
     <node pkg="caffe_ros" type="caffe_ros_node" name="trails_dnn">
         <param name="prototxt_path" value="$(arg trail_prototxt_path)" />
         <param name="model_path"    value="$(arg trail_model_path)" />
@@ -44,9 +45,10 @@
         <param name="data_type"     value="$(arg trail_data_type)" />
         <param name="max_rate_hz"   value="$(arg trail_rate_hz)" />
     </node>
-
+    -->
     <!-- Start the YOLO caffe_ros node -->
-    <node pkg="caffe_ros" type="caffe_ros_node" name="object_dnn">
+    <!-- 
+     <node pkg="caffe_ros" type="caffe_ros_node" name="object_dnn">
         <param name="prototxt_path" value="$(arg object_prototxt_path)" />
         <param name="model_path"    value="$(arg object_model_path)" />
         <param name="output_layer"  value="$(arg object_output_layer)" />
@@ -58,7 +60,7 @@
         <param name="data_type"     value="$(arg object_data_type)" />
         <param name="max_rate_hz"   value="$(arg object_rate_hz)" />
     </node>
-    
+    -->
     <include file="$(find mavros)/launch/node.launch">
         <arg name="pluginlists_yaml" value="$(find mavros)/launch/px4_pluginlists.yaml" />
         <arg name="config_yaml"      value="$(find mavros)/launch/px4_config.yaml" />
@@ -69,6 +71,7 @@
         <arg name="tgt_component" value="$(arg tgt_component)" />
         <!--<arg name="log_output" value="$(arg log_output)" />-->
     </include>
-    
-    <node pkg="holder" type="holder_controller_node" name="holder_controller.py"></node>
+
+    <node pkg="holder" type="holder_controller.py" name="holder_node"></node>
+ 
 </launch>

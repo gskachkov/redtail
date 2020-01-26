@@ -33,7 +33,7 @@ def callbackRCIn(data):
     global joyPub
     global switch_on
     global switch_off
-    # rospy.loginfo(rospy.get_caller_id() + 'I header all %s', data.channels);
+    #rospy.loginfo(rospy.get_caller_id() + 'I header all %s', data.channels);
 
     if data.channels[6] == 2003 and switch_on:
         joyMsg = getJoyMessage(1, 0)        
@@ -51,7 +51,8 @@ def callbackRCIn(data):
 
 def listener():
     global joyPub
-    rospy.init_node('rc_listener_node')
+    rospy.init_node('holder_contoller_node')
+    rospy.loginfo(rospy.get_caller_id() + "Start work" )
     mavros.set_namespace('mavros')
 
     joyPub = rospy.Publisher('/joy', Joy, queue_size=1)
