@@ -19,7 +19,7 @@ def callbackDnn(data):
 
 def listener():
     rospy.init_node('listener', anonymous=True)
-    rospy.Subscriber('/object_dnn/network/output', Image, callback)
+    rospy.Subscriber('/object_dnn/network/output', Image, callbackDnn)
     rospy.spin()
 
 if __name__ == '__main__':

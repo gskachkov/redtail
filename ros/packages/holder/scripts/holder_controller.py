@@ -40,6 +40,15 @@ def callbackRCIn(data):
         rospy.loginfo(rospy.get_caller_id() + 'I header: stop dnn ');
 
 
+def callbackDnn(data):
+    global packageHolded
+    if len(data.data) > 1 and packageHolded:
+        rospy.loginfo(rospy.get_caller_id() + 'I see person first time and droping package')
+        packageHolded = False
+        # Move path to open holder command to variable. It works with Python3, so we run it from outside ros 
+        Popen(["python3", "/home/alex/holder/ServoKit/open_holder.py"], close_fds=True)
+
+
 def listener():
     global joyPub
     rospy.init_node('holder_contoller_node')
