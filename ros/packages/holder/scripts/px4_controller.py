@@ -18,7 +18,7 @@ def callbackRCIn(data):
     if data.channels[8] != 1024 and run_px4_contoller:
         rospy.loginfo(rospy.get_caller_id() + 'I run run_px4_contoller ')
         run_px4_contoller = False
-        os.system("rosrun px4_controller px4_controller_node _altitude_gain:=0 _linear_speed=3 _joy_type:="shield" _obj_det_limit:=0.3")
+        os.system('rosrun px4_controller px4_controller_node _altitude_gain:=0 _linear_speed=3 _joy_type:="shield" _obj_det_limit:=0.3')
 
 
 def listener():
