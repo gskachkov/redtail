@@ -6,7 +6,7 @@ from sensor_msgs.msg import Image, Joy
 from subprocess import Popen
 import mavros
 from mavros_msgs.msg import RCIn
-import roslaunch
+import os
 
 packageHolded = True
 joyPub = True
@@ -34,15 +34,8 @@ def callbackRCIn(data):
         joyPub.publish(joyMsg)
         rospy.loginfo(rospy.get_caller_id() + 'I run run_px4_contoller ')
         run_px4_contoller = False
-        #rosrun px4_controller px4_controller_node _altitude_gain:=0 _linear_speed=3 _joy_type:="shield" _obj_det_limit:=0.3
-        package = 'px4_controller' 
-        executable = 'px4_controller_node' 
-        node = roslaunch.core.Node(package, executable, arg='_altitude_gain:=0 _linear_speed=3 _joy_type:="shield" _obj_det_limit:=0.3')
-        launch = roslaunch.scriptapi.ROSLaunch() launch.start()
-        process = launch.launch(node) 
-        print process.is_alive() 
-        #process.stop()
-
+        os.system("rosrun px4_controller px4_controller_node _altitude_gain:=0 _linear_speed=3 _joy_type:="shield" _obj_det_limit:=0.3")
+  
     if data.channels[9] != 1024 and switch_on:
         joyMsg = getJoyMessage(1, 0)        
         joyPub.publish(joyMsg)
