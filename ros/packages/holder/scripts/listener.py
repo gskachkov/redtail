@@ -1,62 +1,25 @@
 #!/usr/bin/env python
-# Software License Agreement (BSD License)
-#
-# Copyright (c) 2008, Willow Garage, Inc.
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-#
-#  * Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-#  * Redistributions in binary form must reproduce the above
-#    copyright notice, this list of conditions and the following
-#    disclaimer in the documentation and/or other materials provided
-#    with the distribution.
-#  * Neither the name of Willow Garage, Inc. nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-# POSSIBILITY OF SUCH DAMAGE.
-#
-# Revision $Id$
-
-## Simple talker demo that listens to std_msgs/Strings published 
-## to the 'chatter' topic
 
 import rospy
 from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from subprocess import Popen
 
-readyToOpen = True
+packageHolded = True
 
-def callback(data):
-    global readyToOpen
-    rospy.loginfo(rospy.get_caller_id() + 'I heard %s', len(data.data))
-    if len(data.data) > 1 and readyToOpen:
-        rospy.loginfo(rospy.get_caller_id() + 'I see person first time')
-        readyToOpen = False
+
+def callbackDnn(data):
+    global packageHolded
+    if len(data.data) > 1 and packageHolded:
+        rospy.loginfo(rospy.get_caller_id() + 'I see person first time and droping package')
+        packageHolded = False
+        # Move path to open holder command to variable. It works with Python3, so we run it from outside ros 
         Popen(["python3", "/home/alex/holder/ServoKit/open_holder.py"], close_fds=True)
-        rospy.loginfo(rospy.get_caller_id() + 'I am droping package')
+
 
 def listener():
     rospy.init_node('listener', anonymous=True)
-
     rospy.Subscriber('/object_dnn/network/output', Image, callback)
-
     rospy.spin()
 
 if __name__ == '__main__':
