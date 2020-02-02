@@ -18,7 +18,7 @@
     <arg name="host_ip" default="192.169.1.1" />
 
 	<!-- MAVROS settings -->
-    <arg name="fcu_url"       default="/dev/ttyTHS1:500000" />
+  <arg name="fcu_url"       default="/dev/ttyTHS1:500000" />
 	<arg name="gcs_url"       default="udp://@$(arg host_ip)" />
 	<arg name="tgt_system"    default="1" />
 	<arg name="tgt_component" default="1" />
@@ -26,16 +26,17 @@
 
     <!-- Camera (gscam) settings -->
     <arg name="device"     default="/dev/video0" />
-    <arg name="img_width"  default="640" />
-    <arg name="img_height" default="360" />
+    <arg name="img_source_width"  default="1280" />
+    <arg name="img_source_height" default="720" />
+    <arg name="img_width"  default="1920" />
+    <arg name="img_height" default="1080" />
 
     <!-- Start the GSCAM node -->
 <!-- Use 2 sinks (UDP H.265 streaming + ROS topic) -->
-    <!-- 
     <node pkg="gscam" type="gscam" name="gscam">
-        <env name="GSCAM_CONFIG" value="v4l2src device=$(arg device) ! tee name=t ! queue ! videoconvert ! omxh265enc ! video/x-h265, stream-format=byte-stream ! h265parse ! rtph265pay config-interval=1 ! udpsink host=$(arg host_ip) port=6000 t. ! queue ! video/x-raw, width=$(arg img_width), height=$(arg img_height) ! videoconvert" />
+        <env name="GSCAM_CONFIG" value="v4l2src device=$(arg device) ! video/x-raw, width=$(arg img_source_width), height=$(arg img_source_height) ! videoscale method=0 add-borders=false ! video/x-raw, width=$(arg img_width), height=$(arg img_height) ! videoconvert" />
     </node>
-   -->
+  
     <!-- Start the Trails caffe_ros node -->
     <node pkg="caffe_ros" type="caffe_ros_node" name="trails_dnn">
         <param name="prototxt_path" value="$(arg trail_prototxt_path)" />
